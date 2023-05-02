@@ -17,7 +17,7 @@ from flask_socketio import SocketIO, emit, join_room, leave_room
 from firefly.data_reader import SimpleReader
 
 #in principle, we could read in the data here...
-
+curr_dir = os.path.dirname(__file__)
 
 app = Flask(__name__)
 
@@ -286,13 +286,18 @@ def startFlaskServer(
             print(f"from directory {directory}")
             app.static_folder = os.path.join(directory, 'static')
             app.template_folder = os.path.join(directory, 'templates')
+            print(f"static folder: {app.static_folder}")
+            print(f"template folder: {app.template_folder}")
 
         global fps, dec
 
         fps = frames_per_second
         dec = decimation_factor
 
-        socketio.run(app, host='0.0.0.0', port=port)#, use_reloader=True)
+        socketio.run(app, host='0.0.0.0', port=port,
+                     debug=True,
+                     keyfile='/Users/youngsam/Code/random/Firefly/key.pem',
+                     certfile='/Users/youngsam/Code/random/Firefly/cert.pem')#, use_reloader=True)
     except: raise
     finally: os.chdir(old_dir)
 
@@ -378,7 +383,7 @@ def spawnFireflyServer(
             "Waiting up to %d seconds for background Firefly server to start..."%max_time,
             end="")
         while True:
-            try: requests.post(f'http://localhost:{port:d}',json="test"); break
+            try: requests.post(f'https://localhost:{port:d}',json="test"); break
             except: 
             ## need to re-check the connection each iteration
                 if time.time()-init_time >= max_time: raise RuntimeError(
@@ -386,7 +391,7 @@ def spawnFireflyServer(
                     " A Firefly server could not be opened in the background.")
                 else: print(".",end=""); time.sleep(1)
             
-    print(f"done! Your server is available at - http://localhost:{port}")
+    print(f"done! Your server is available at - https://localhost:{port}")
 
     return process
 
