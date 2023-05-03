@@ -48,9 +48,9 @@
     "CDmax": 10,
     "scaleCD" : 0.01,
 
-    "VideoCapture_duration": 5,
-    "VideoCapture_FPS": 30,
+    "VideoCapture_duration": 60,
+    "VideoCapture_FPS": 24,
     "VideoCapture_filename": "firefly_capture",
     "VideoCapture_format": 0,
-    "VideoCapture_formats": [".gif",".png",".jpg"]
+    "VideoCapture_formats": [".gif",".png",".jpg", ".webm"]
 }

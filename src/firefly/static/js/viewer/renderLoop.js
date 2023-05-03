@@ -2,6 +2,7 @@ function animate(time) {
 	viewerParams.animating = true;
 
 	// check if app should be put to sleep
+
 	if (!viewerParams.pauseAnimation){
 		var currentTime = new Date();
 		var seconds = currentTime.getTime()/1000;
@@ -13,6 +14,7 @@ function animate(time) {
 		if (viewerParams.captureCanvas) capture();
 
 		render();
+
 		// calculate framerate and optionally display it. 
 		// put the app to sleep if FPS < .66 by setting
 		// viewerParams.pauseAnimation = true
@@ -482,16 +484,21 @@ function disable_particle_group_mesh(p,m){
 }
 
 function render() {
+	// Render the original scene and equirectangular conversion
+	// viewerParams.renderer.render(viewerParams.scene, viewerParams.camera);
+	// viewerParams.c2e.convert(viewerParams.c2e.cubeCamera, false); // Read the pixels from the render target
+	
 	// 2d projection to texture and then remap according to colormap
 	if (viewerParams.columnDensity){render_column_density();} 
 	// render straight to the canvas
 	else { viewerParams.renderer.render( viewerParams.scene, viewerParams.camera ); }
-
+	viewerParams.c2e.update(viewerParams.camera, viewerParams.scene);
+	
 	// copy the canvas to the stream if active	
 	if (viewerParams.streamerActive){ render_stream(); }
 }
 
-function render_column_density(){
+function render_column_density() {
 	//first, render to the texture
 	viewerParams.renderer.setRenderTarget(viewerParams.textureCD);
 	viewerParams.renderer.render( viewerParams.scene, viewerParams.camera);
@@ -539,15 +546,17 @@ function capture(){
 	var screenWidth = window.innerWidth;
 	var screenHeight = window.innerHeight;
 	var aspect = screenWidth / screenHeight;
-	
 
-	viewerParams.renderer.setSize(viewerParams.renderWidth, viewerParams.renderHeight);
-	viewerParams.camera.aspect = viewerParams.renderWidth / viewerParams.renderHeight;
+	var renderWidth = 6080
+	var renderHeight = 3040
+	viewerParams.renderer.setSize(renderWidth, renderHeight);
+	viewerParams.camera.aspect = renderWidth / renderHeight;
 	viewerParams.camera.updateProjectionMatrix();
 	if (viewerParams.columnDensity){
 		viewerParams.renderer.render( viewerParams.sceneCD, viewerParams.cameraCD );
 	} else {
-		viewerParams.renderer.render( viewerParams.scene, viewerParams.camera );
+		viewerParams.renderer.render(viewerParams.scene, viewerParams.camera);
+		viewerParams.c2e.update(viewerParams.camera, viewerParams.scene);
 	}
 
 	viewerParams.capturer.capture( viewerParams.renderer.domElement );
@@ -582,9 +591,10 @@ function capture(){
 		viewerParams.capturer.stop();
 		var ext = viewerParams.VideoCapture_formats[viewerParams.VideoCapture_format];
 		var fmt = ext.slice(1);
-		if (fmt != 'gif') ext = '.tar';
+		// if (fmt != 'gif') ext = '.tar';
 		viewerParams.capturer.save(function(blob){ 
 			// this callback executes after the rendering is complete
+			print('saving')
 			download(blob, viewerParams.VideoCapture_filename + ext, fmt);
 
 			//remove the recording progress indicator
@@ -624,11 +634,11 @@ function update_memory_usage(){
 
 function update_framerate(seconds,time){
 	// if we spent more than 1.5 seconds drawing the last frame, send the app to sleep
-	if ( viewerParams.sleepTimeout != null && (seconds-viewerParams.currentTime) > viewerParams.sleepTimeout){
-		console.log("Putting the app to sleep, taking too long!",(seconds-viewerParams.currentTime));
-		viewerParams.pauseAnimation=true;
-		showSleep();
-	}
+	// if ( viewerParams.sleepTimeout != null && (seconds-viewerParams.currentTime) > viewerParams.sleepTimeout){
+	// 	console.log("Putting the app to sleep, taking too long!",(seconds-viewerParams.currentTime));
+	// 	viewerParams.pauseAnimation=true;
+	// 	showSleep();
+	// }
 
 	// use previous frame rendering time to calculate FPS. 
 	// use average of previous 100 frames so FPS is a bit more stable.

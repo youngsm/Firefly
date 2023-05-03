@@ -1,3 +1,4 @@
+
 /////////////////////
 //// for sockets
 /////////////////////
@@ -316,7 +317,7 @@ function initPVals(){
 
 		if (viewerParams.parts[p].hasOwnProperty("filterKeys")){
 			viewerParams.fkeys[p] = viewerParams.parts[p].filterKeys;
-			for (var k=0; k<viewerParams.fkeys[p].length; k++){
+			for (var k = 0; k < viewerParams.fkeys[p].length; k++) {
 				var fkey = viewerParams.fkeys[p][k];
 				//calculate limits for the filters
 				if (viewerParams.parts[p][fkey] != null){
@@ -378,11 +379,11 @@ function initPVals(){
 
 // size the window and optionally initialize stereo view
 function initScene() {
-	var screenWidth = window.innerWidth;
-	var screenHeight = window.innerHeight;
-	var aspect = screenWidth / screenHeight;
+	let screenWidth = window.innerWidth;
+	let screenHeight = window.innerHeight;
+	let aspect = screenWidth / screenHeight;
 
-	viewerParams.renderWidth = window.innerWidth;
+	viewerParams.renderWidth = window.innerWidth; 
 	viewerParams.renderHeight = window.innerHeight;
 
 	if (viewerParams.reset){
@@ -420,6 +421,10 @@ function initScene() {
 		viewerParams.effect.setAspect(1.);
 		viewerParams.effect.setEyeSeparation(viewerParams.stereoSep);
 
+
+		// viewerParams.effect = new THREE.StereoEffect2(viewerParams.renderer);
+		// viewerParams.effect.setEyeSeparation(viewerParams.stereoSep);
+
 		// Wtarting with stereo seems to break things (e.g., I can't change particle sizes)
 		//   but it works fine if I toggle stereo in the GUI.  I have no idea why this breaks.
 		// So, I will switch to stereo if needed after the first render pass (?)
@@ -453,7 +458,7 @@ function initScene() {
 
 	//apply presets from the options file
 	if (viewerParams.parts.hasOwnProperty('options')) applyOptions();
-
+	
 	// controls
 	initControls();
 
@@ -469,7 +474,22 @@ function initScene() {
 	// //see also GL_POINT_SIZE_RANGE
 	// var canvas = d3.select('canvas').node();
 	// var gl = canvas.getContext('webgl');
-	// console.log(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE), gl.getParameter(gl.POINT_SMOOTH));
+	// console.log(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE),
+	// gl.getParameter(gl.POINT_SMOOTH));
+	
+	// composer
+	viewerParams.c2e = new CubemapToEquirectangular(viewerParams.renderer, true);
+	// viewerParams.composer = new THREE.EffectComposer(viewerParams.renderer, screenWidth, screenHeight);
+
+	// // render pass for original scene
+	// var renderPass = new THREE.RenderPass(viewerParams.scene, viewerParams.camera);
+	// viewerParams.composer.addPass(renderPass);
+
+	// // shader pass for equi-rectangular projection
+	// var equirectangularShaderPass = new THREE.ShaderPass(viewerParams.c2e.material, viewerParams.camera);
+	// equirectangularShaderPass.renderToScreen = true;
+	// viewerParams.composer.addPass(equirectangularShaderPass);
+
 }
 
 // apply any settings from options file
@@ -998,7 +1018,8 @@ function sendInitGUI(prepend=[], append=[]){
 
 	//check if there is a tween file
 	viewerParams.haveTween = false;
-	if (viewerParams.filenames.hasOwnProperty('tweenParams') &&  ('tweenParams' in viewerParams.parts && viewerParams.parts.tweenParams.loaded)) viewerParams.haveTween = true;
+	if (viewerParams.filenames.hasOwnProperty('tweenParams') && ('tweenParams' in viewerParams.parts && viewerParams.parts.tweenParams.loaded)) viewerParams.haveTween = true;
+	console.log('haveTween',viewerParams.haveTween)
 	forGUI.push({'setGUIParamByKey':[viewerParams.haveTween,"haveTween"]});
 	forGUI.push({'setGUIParamByKey':[viewerParams.inTween,"inTween"]});
 

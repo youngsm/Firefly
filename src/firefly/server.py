@@ -295,9 +295,9 @@ def startFlaskServer(
         dec = decimation_factor
 
         socketio.run(app, host='0.0.0.0', port=port,
-                     debug=True,
-                     keyfile='/Users/youngsam/Code/random/Firefly/key.pem',
-                     certfile='/Users/youngsam/Code/random/Firefly/cert.pem')#, use_reloader=True)
+                     debug=True,)
+                    #  keyfile='/Users/youngsam/Code/random/Firefly/key.pem',
+                    #  certfile='/Users/youngsam/Code/random/Firefly/cert.pem')#, use_reloader=True)
     except: raise
     finally: os.chdir(old_dir)
 
@@ -383,7 +383,7 @@ def spawnFireflyServer(
             "Waiting up to %d seconds for background Firefly server to start..."%max_time,
             end="")
         while True:
-            try: requests.post(f'https://localhost:{port:d}',json="test"); break
+            try: requests.post(f'http://localhost:{port:d}',json="test"); break
             except: 
             ## need to re-check the connection each iteration
                 if time.time()-init_time >= max_time: raise RuntimeError(
@@ -391,7 +391,7 @@ def spawnFireflyServer(
                     " A Firefly server could not be opened in the background.")
                 else: print(".",end=""); time.sleep(1)
             
-    print(f"done! Your server is available at - https://localhost:{port}")
+    print(f"done! Your server is available at - http://localhost:{port}")
 
     return process
 

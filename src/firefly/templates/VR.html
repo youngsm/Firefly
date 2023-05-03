@@ -11,6 +11,11 @@
 
 	<body>
 
+		<audio id="narration" preload="auto" style="display: none">
+			<source src="static/sounds/david.ogg" type="audio/ogg">
+			<source src="static/sounds/david.mp3" type="audio/mpeg">
+		</audio>
+
 		<div style="background-color:black; position:absolute; top:0; bottom:0; left:0; right:0;" id='loader'></div>
 
 		<div id="ContentContainer" > 
@@ -67,6 +72,7 @@
 		<script src="static/lib/THREEx.FullScreen.js"></script>
 		<script src="static/lib/THREEx.WindowResize.js"></script>
 		<script src="static/lib/StereoEffect.js"></script>
+		<script src="static/lib/CubemapToEquirectangular.js"></script>
 <!-- https://github.com/collinhover/threeoctree -->
 <!-- 		<script src="static/lib/threeoctree.min.js"></script> -->
 		
@@ -140,6 +146,12 @@
 		<script src="static/js/misc/FireflyFormat1.js"></script>
 		<script src="static/js/misc/FireflyOctnodeSubstring.js"></script>
 		
+		
+		<!-- <div id="overlay">
+			<button id="startButton">Play Audio</button>
+		</div>
+		 -->
+
 		<script>
 			//called upon loading
 			connectGUISocket();
@@ -150,8 +162,40 @@
 			// 3.  Run `adb devices` on the command line to make sure your device is recognized
 			// 4.  Run `adb reverse tcp:5000 tcp:5000` on the command line to enable port 5000 on device
 			// 5.  Go to localhost:5000/VR on device to enter VR
-			// runLocal(useSockets=true, showGUI=true, allowVRControls=false, startStereo=false,
-			runLocal(true, true, true, false);
+			//     runLocal(useSockets=true, showGUI=true, allowVRControls=false,
+			//     startStereo=false,
+			
+			// for meta quest
+			// runLocal(true, true, true, false);
+			// for google cardboard
+
+			/*
+			const startButton = document.getElementById('startButton');
+			startButton.addEventListener('click', init);
+
+			// // AUDIO!
+			function init() {
+				const listener = new THREE.AudioListener();
+				viewerParams.camera.add(listener);
+				// global audio source
+				const sound = new THREE.Audio(listener);
+				// load a sound and set it as the Audio object's buffer
+				// const audioloader = new THREE.AudioLoader();
+				const soundElement = document.getElementById('narration');
+				sound.setMediaElementSource(soundElement);
+				soundElement.play();
+
+				// audioloader.autoplay = true;
+				// audioloader.load('static/sounds/david.ogg', function (buffer) {
+				//	sound.setBuffer(buffer);
+				//	sound.setLoop(false);
+				//	sound.setVolume(1);
+				//	sound.play();
+				//});
+			}
+			*/
+
+			runLocal(true, true, false, true);
 		</script>
 
 	</body>

@@ -124,7 +124,7 @@ function createPartsMesh(pdraw = viewerParams.partsKeys, node=null){
 	clearPartsMesh(pClear = pdraw);
 	//console.log("drawing", pdraw, viewerParams.plotNmax,viewerParams.decimate)
 
-	//d3.select("#splashdiv5").text("Drawing...");
+	// d3.select("#splashdiv5").text("Drawing...");
 	viewerParams.drawfrac = 0.;
 	var ndraw = 0.;
 	var ndiv = Math.round(viewerParams.parts.totalSize / 10.);

@@ -41,7 +41,7 @@ function createTweens(){
 	//these should not be overwritten
 	var savePos = Object.assign({}, cPos); 
 	var saveRot = Object.assign({}, cRot); 
-	var cdur = 3000;
+	var cdur = 30;  // units of milliseconds
 
 	viewerParams.tweenviewerParams.position.unshift(cPos)
 	viewerParams.tweenviewerParams.rotation.unshift(cRot)

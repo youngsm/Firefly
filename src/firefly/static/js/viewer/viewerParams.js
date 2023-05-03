@@ -38,6 +38,8 @@ function defineViewerParams(){
 		this.controls = null
 		this.effect = null;
 		this.normalRenderer = null;
+		this.c2e = null;
+		this.composer = null;
 
 		this.title = null;
 		this.annotation = null;
@@ -96,15 +98,15 @@ function defineViewerParams(){
 		this.stereoSepMax = 1.;
 
 		//for rendering to image
-		this.renderWidth = 1920;
-		this.renderHeight = 1200;
+		this.renderWidth = 4320;
+		this.renderHeight = 2160;
 
 		// defaults for rendering to movie
 		this.VideoCapture_duration = 5; // seconds
-		this.VideoCapture_FPS = 30; // 30 frames per second
+		this.VideoCapture_FPS = 24; // 30 frames per second
 		this.VideoCapture_filename = 'firefly_capture';
 		this.VideoCapture_format = 0; // index of format
-		this.VideoCapture_formats = ['.gif','.png','.jpg']//,'.webm'] // webm doesn't seem to be working :\
+		this.VideoCapture_formats = ['.gif','.png','.jpg','.webm'] // webm doesn't seem to be working :\
 		this.VideoCapture_frame = 0; // will store the frame so that we can shut off the capture when completed
 		// the  CCCapture object will be added when recordVideo is called
 		this.capturer = null; 

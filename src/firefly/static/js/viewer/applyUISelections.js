@@ -500,9 +500,9 @@ function recordVideo(fps = null, duration = null){
 		format: viewerParams.VideoCapture_formats[viewerParams.VideoCapture_format].slice(1), 
 		verbose: true,
 		// name: viewerParams.VideoCapture_filename,
-		// framerate: fps,
-		// timeLimit: duration,
-		// autoSaveTime: duration,
+		framerate: fps,
+		timeLimit: duration,
+		autoSaveTime: 15,
 	} );
 
 	viewerParams.capturer.start()
